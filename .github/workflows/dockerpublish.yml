@@ -14,7 +14,7 @@ on:
   pull_request:
 
 env:
-  IMAGE_NAME: image
+  IMAGE_NAME: lets-encrypt-linode
 
 jobs:
   # Run tests.
@@ -72,4 +72,6 @@ jobs:
           echo VERSION=$VERSION
 
           docker tag image $IMAGE_ID:$VERSION
+          echo tagged!
           docker push $IMAGE_ID:$VERSION
+          echo pushed!

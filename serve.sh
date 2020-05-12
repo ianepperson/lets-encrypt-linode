@@ -8,7 +8,7 @@ export ACME=/root/.acme.sh/acme.sh
 $ACME --issue -d $DOMAIN_NAME \
       -w /usr/share/nginx/html \
       --reloadcmd "/install_cert.sh" \
-      --pre-hook="rm $OK_FILE" \
+      --pre-hook "rm $OK_FILE" \
       --cert-file /root/cert.pem \
       --key-file /root/key.pem
 

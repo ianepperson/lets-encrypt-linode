@@ -1,3 +1,5 @@
+![Docker](https://github.com/ianepperson/lets-encrypt-linode/workflows/Docker/badge.svg)
+
 # Lets Encrypt Linode!
 
 This is a simple Docker container to assist in using [Let's Encrypt](https://letsencrypt.org/) with a [Linode NodeBalancer](https://www.linode.com/products/nodebalancers/) to upgrade an HTTP connection to HTTPS.

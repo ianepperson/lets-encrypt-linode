@@ -48,34 +48,41 @@ The Docker image allows defining a couple of ways to give feedback about the sta
 
 #### Mailgun
 
-> #The api key in your account.
-> MAILGUN_API_KEY="xxxxxxxx"
-> 
-> #The api domain, you can use the sandbox domain in your account.
-> MAILGUN_API_DOMAIN="xxxxxx.com"
-> 
-> #Optional,  the mail from address. it must be user@MAILGUN_API_DOMAIN
-> MAILGUN_FROM="xxx@xxxxxx.com"
-> 
-> #The mail to address, which is to receive the notification.
-> MAILGUN_TO="yyyy@gmail.com"
-> 
-> #Optional, if your mailgun account is in eu region, you must set MAILGUN_REGION
-> MAILGUN_REGION="us|eu"          #optional, use "us" as default
+```
+ #The api key in your account.
+ MAILGUN_API_KEY="xxxxxxxx"
+ 
+ #The api domain, you can use the sandbox domain in your account.
+ MAILGUN_API_DOMAIN="xxxxxx.com"
+ 
+ #Optional,  the mail from address. it must be user@MAILGUN_API_DOMAIN
+ MAILGUN_FROM="xxx@xxxxxx.com"
+ 
+ #The mail to address, which is to receive the notification.
+ MAILGUN_TO="yyyy@gmail.com"
+ 
+ #Optional, if your mailgun account is in eu region, you must set MAILGUN_REGION
+ MAILGUN_REGION="us|eu"          #optional, use "us" as default
+```
+
 
 #### Sendgrid
 
-> SENDGRID_API_KEY="xxxxxxxxxx"
-> SENDGRID_FROM="xxxx@cccc.com"
-> SENDGRID_TO="xxxx@xxx.com"
+```
+ SENDGRID_API_KEY="xxxxxxxxxx"
+ SENDGRID_FROM="xxxx@cccc.com"
+ SENDGRID_TO="xxxx@xxx.com"
+```
 
 #### Slack
 
 Set up your (webhook)[https://slack.com/apps/A0F7XDUAZ-incoming-webhooks], then set this
 
-> SLACK_WEBHOOK_URL="..."
-> SLACK_CHANNEL="..."     # overwrites Slack Webhook channel
-> SLACK_USERNAME="..."    # overwrites Slack Webhook username
+```
+ SLACK_WEBHOOK_URL="..."
+ SLACK_CHANNEL="..."     # overwrites Slack Webhook channel
+ SLACK_USERNAME="..."    # overwrites Slack Webhook username
+```
 
 #### If This Then That
 
@@ -87,15 +94,17 @@ Secondly, create our IFTTT applet with Webhooks as this' and whatever as that', 
 
 Now we can set up the notification hook:
 
-> #The API key.
-> IFTTT_API_KEY="xxxx"
-> 
-> #Our event name, this should be same as the setting of your applet.
-> IFTTT_EVENT_NAME="acme_status"
-> 
-> #Optional: the key of notification subject, available values are "value1", "value2", "value3", default "value1"
-> IFTTT_SUBJECT_KEY="value1"
-> 
-> #Optional: the key of notification content, available values are "value1", "value2", "value3", default "value2"
-> IFTTT_CONTENT_KEY="value2"
-> 
+```
+ #The API key.
+ IFTTT_API_KEY="xxxx"
+ 
+ #Our event name, this should be same as the setting of your applet.
+ IFTTT_EVENT_NAME="acme_status"
+ 
+ #Optional: the key of notification subject, available values are "value1", "value2", "value3", default "value1"
+ IFTTT_SUBJECT_KEY="value1"
+ 
+ #Optional: the key of notification content, available values are "value1", "value2", "value3", default "value2"
+ IFTTT_CONTENT_KEY="value2"
+```
+ 

@@ -3,6 +3,26 @@
 # Exit on any error
 set -e
 
+# If we don't have a NODEBALANCER_ID, list the available ones and exit
+if [ -z "$NODEBALANCER_ID" ];
+  then
+      echo "No NODEBALACER_ID set. Set it from the list below."
+      linode-cli nodebalancers list
+      exit 1
+fi;
+
+# If we don't have a CONFIG_ID, list the available ones and exit
+if [ -z "$CONFIG_ID" ];
+  then
+      echo "No CONFIG_ID set. Set it from the list below."
+      linode-cli nodebalancers configs-list $NODEBALANCER_ID
+      exit 1
+fi;
+
+# Verify that the NODEBALANCER_ID and CONFIG_ID are valid
+linode-cli nodebalancers config-view $NODEBALANCER_ID $CONFIG_ID
+
+# Where the acme.sh command is located
 export ACME=/root/.acme.sh/acme.sh
 
 # for notifications, see https://github.com/acmesh-official/acme.sh/wiki/notify
@@ -35,5 +55,5 @@ $ACME --issue -d $DOMAIN_NAME \
       --cert-file /root/cert.pem \
       --key-file /root/key.pem
 
-# Bring the web server back to the foreground
+# Bring the web server back to the foreground for continued service
 fg

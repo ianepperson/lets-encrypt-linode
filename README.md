@@ -155,6 +155,10 @@ A text file with the contents of `ok` is written to `http://<your domain>/.well-
 
 If you configure the optional notifications (via additional environment variables) status will be reported through those services.
 
+## Updating
+
+If (when?) this Docker image is updated and you want to start using it, or if you want to change your configuration, you're going to have to stop the container and start up a new one. During this transition period, some functionality will be lost - speciically, http traffic that comes into your site will receive a 500 error instead of being redirected to https. However, https traffic will not be effected. For all visitors who have already been redirected or those coming in via an https link, there will be no downtime.
+
 ## Required Variables
 
  * DOMAIN_NAME

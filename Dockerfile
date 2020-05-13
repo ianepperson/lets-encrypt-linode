@@ -22,19 +22,12 @@ RUN echo "**** install OpenSSL ****" && \
     curl https://get.acme.sh | sh && \
     echo "**** setup health file ****" && \
     mkdir -p    /usr/share/nginx/html/.well-known/acme-challenge && \
-    echo "ok" > /usr/share/nginx/html/.well-known/acme-challenge/__ok__
+    echo "ok" > /usr/share/nginx/html/.well-known/acme-challenge/__ok__.txt
 
-ENV OK_FILE="/usr/share/nginx/html/.well-known/acme-challenge/__ok__"
+ENV OK_FILE="/usr/share/nginx/html/.well-known/acme-challenge/__ok__.txt"
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY serve.sh install_cert.sh /
-
-ENV DOMAIN_NAME="changeme.com"
-
-# from linode:
-ENV LINODE_CLI_TOKEN="change-me"
-ENV NODEBALANCER_ID=""
-ENV CONFIG_ID=""
 
 EXPOSE 80
 

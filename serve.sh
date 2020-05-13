@@ -45,7 +45,7 @@ if [ -n "$IFTTT_API_KEY" ];
 fi;
 
 # Start the web server in the background
-nginx -g 'daemon off;' &
+nginx
 
 # Run the cert using nginx
 $ACME --issue -d $DOMAIN_NAME \
@@ -55,5 +55,5 @@ $ACME --issue -d $DOMAIN_NAME \
       --cert-file /root/cert.pem \
       --key-file /root/key.pem
 
-# Bring the web server back to the foreground for continued service
-fg
+# Tail the nginx log files to keep the container alive
+tail -f /var/log/nginx/error.log -f /var/log/nginx/access.log

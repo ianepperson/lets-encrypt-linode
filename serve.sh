@@ -88,7 +88,8 @@ $ACME --issue -d $DOMAIN_NAME \
       --pre-hook "rm $OK_FILE" \
       $NOTIFY_HOOK \
       --cert-file /root/cert.pem \
-      --key-file /root/key.pem
+      --key-file /root/key.pem \
+      --force
 
 # Expected log files
 touch /root/.acme.sh/acme.sh.log

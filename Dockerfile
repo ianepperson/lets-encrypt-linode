@@ -4,6 +4,7 @@ FROM nginx:stable-alpine
 # This hack is widely applied to avoid python printing issues in docker containers.
 # See: https://github.com/Docker-Hub-frolvlad/docker-alpine-python3/pull/13
 ENV PYTHONUNBUFFERED=1
+VOLUME /data
 
 RUN echo "**** install OpenSSL ****" && \
     apk add --no-cache openssl && \
@@ -20,6 +21,7 @@ RUN echo "**** install OpenSSL ****" && \
     pip3 install --no-cache linode-cli && \
     echo "**** install acme.sh ****" && \
     curl https://get.acme.sh | sh && \
+    /root/.acme.sh/acme.sh --uninstall-cronjob && \
     echo "**** setup health file ****" && \
     mkdir -p    /usr/share/nginx/html/.well-known/acme-challenge && \
     echo "ok" > /usr/share/nginx/html/.well-known/acme-challenge/__ok__.txt

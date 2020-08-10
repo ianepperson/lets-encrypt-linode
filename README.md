@@ -51,7 +51,7 @@ It's handy to have [Linode-cli](https://www.linode.com/docs/platform/api/linode-
 
 You need a single NodeBalancer with two configs:
 
-- 80/http which forwards to the Docker container.
+- 80/http which forwards to the lets-encrypt-linode Docker container.
 - 443/https which will be updated by the Docker container, and forwards to your web server.
 
 You will need to know the NodeBalancer's ID and the 443/https config's ID. This can be determined through the Linode-cli.
@@ -133,7 +133,7 @@ Find the ID for the 443/https configuration and note it. Reopen the `lets-encryp
 Now, let's start up the service. If you're forwarding the HTTP traffic through the load balancer to a port other than 88, then change the `-p 88:80` as necessary. (ie, if you've set it to use 8080, use `-p 8080:80`.)
 
 ```
-> docker run -p 88:80 -d --env-file ./lets-encrypt-linode.env docker.pkg.github.com/ianepperson/lets-encrypt-linode/lets-encrypt-linode
+> docker run -p 88:80 -d --env-file ./lets-encrypt-linode.env --mount='type=volume,src=lets-encrypt-linode,dst=/data' docker.pkg.github.com/ianepperson/lets-encrypt-linode/lets-encrypt-linode
 ```
 
 Use `docker ps` to see your running containers. If there was an error and your container didn't start it will not be listed; leave off the `-d` to see the output on your console.
@@ -145,7 +145,13 @@ Potential problems might be:
 
 To see the logged output, use `docker logs <the container id>` - which should show the service listing the old linode configuration, getting a new cert, then updating the linode configuration with a new SSL fingerprint. Nginx's logs are tail'd to this output as well - you should see any access the HTTP/80 server.
 
-Congratulations! Now navigate to your domain name via http (`http://my_domain.com` or whatever) and you should be immediately redirected to a valid https connection (`https://my_domain.com`). As long as the container is running, it will refresh the certificate every 60 days. Every time the container restarts, a new certificate will be generated and installed.
+Congratulations! Now navigate to your domain name via http (`http://my_domain.com` or whatever) and you should be immediately redirected to a valid https connection (`https://my_domain.com`). As long as the container is running, it will refresh the certificate every 60 days. Every time the container restarts the certificate will be renewed. To generate a new certificate or to change the domain name, stop the container, delete the `lets-encrypt-linode` volume and restart the container.
+
+## Volumes
+
+The images stores its data (`key.pem`, `cert.pem` and more) in the `/data` volume. The simplest usage is to create a Docker volume and mount it. This is reasonably secure as the data is only visible to the host `root` user and anyone who can use Docker to mount the volume.
+
+More complex mount solutions (and more secure volumes) are beyond the scope of this documentation.
 
 ## Monitoring
 
@@ -157,7 +163,7 @@ If you configure the optional notifications (via additional environment variable
 
 ## Updating
 
-If (when?) this Docker image is updated and you want to start using it, or if you want to change your configuration, you're going to have to stop the container and start up a new one. During this transition period, some functionality will be lost - speciically, http traffic that comes into your site will receive a 500 error instead of being redirected to https. However, https traffic will not be effected. For all visitors who have already been redirected or those coming in via an https link, there will be no downtime.
+When this Docker image is updated and you want to start using it, or if you want to change your configuration, you're going to have to stop the container and start up a new one. During this transition period, some functionality will be lost - specifically, http traffic that comes into your site will receive a 500 error instead of being redirected to https. However, https traffic will not be effected. For all visitors who have already been redirected or those coming in via an https link, there will be no downtime.
 
 ## Required Variables
 
@@ -165,6 +171,8 @@ If (when?) this Docker image is updated and you want to start using it, or if yo
  * LINODE_CLI_TOKEN
  * NODEBALANCER_ID
  * CONFIG_ID
+
+Note that if you change the DOMAIN_NAME you've been using, you'll have to delete and recreate the volume as well to prevent the attempted automatic renewal of the old name.
 
 ## Optional Variables
 

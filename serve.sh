@@ -41,7 +41,7 @@ fi;
 # Verify that the NODEBALANCER_ID and CONFIG_ID are valid
 linode-cli nodebalancers config-view $NODEBALANCER_ID $CONFIG_ID
 
-# Where the acme.sh command is located
+# Where the installed acme.sh command is located
 export ACME=/root/.acme.sh/acme.sh
 
 # for notifications, see https://github.com/acmesh-official/acme.sh/wiki/notify
@@ -81,20 +81,24 @@ fi;
 # Start the web server in the background
 nginx
 
-# Run the cert using nginx
-$ACME --issue -d $DOMAIN_NAME \
+# Run the cert for the given domain using nginx
+$ACME --config-home /data \
+      --issue -d $DOMAIN_NAME \
       -w /usr/share/nginx/html \
       --reloadcmd "/install_cert.sh" \
-      --pre-hook "rm $OK_FILE" \
+      --pre-hook "rm $OK_FILE || true" \
       $NOTIFY_HOOK \
-      --cert-file /root/cert.pem \
-      --key-file /root/key.pem \
+      --cert-file /data/cert.pem \
+      --key-file /data/key.pem \
       --force
 
+# Install the cronjob
+$ACME --config-home /data --install-cronjob
+
 # Expected log files
-touch /root/.acme.sh/acme.sh.log
+touch /data/acme.sh.log
 touch /var/log/nginx/access.log
 touch /var/log/nginx/error.log
 
 # Tail the log files to keep the container alive
-tail -f /var/log/nginx/error.log -f /var/log/nginx/access.log -f /root/.acme.sh/acme.sh.log
+tail -f /var/log/nginx/error.log -f /var/log/nginx/access.log -f /data/acme.sh.log

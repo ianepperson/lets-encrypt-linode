@@ -4,8 +4,8 @@
 set -e
 
 linode-cli nodebalancers config-update \
-    --ssl_cert /root/cert.pem \
-    --ssl_key /root/key.pem \
+    --ssl_cert /data/cert.pem \
+    --ssl_key /data/key.pem \
     $NODEBALANCER_ID $CONFIG_ID \
     --no-defaults
 

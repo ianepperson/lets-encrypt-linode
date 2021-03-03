@@ -22,11 +22,22 @@ then
     exit 1
 fi;
 
+echo Validating token...
+linode-cli nodebalancers list --no-headers --text --format id && echo 'valid!'
+
 # If we don't have a NODEBALANCER_ID, list the available ones and exit
 if [ -z "$NODEBALANCER_ID" ];
 then
-    echo No NODEBALACER_ID set. Set it from the list below.
+    echo No NODEBALANCER_ID set. Set it from the list below.
     linode-cli nodebalancers list
+    exit 1
+fi;
+
+export NODEBALANCER_LABEL=`linode-cli nodebalancers view $NODEBALANCER_ID --text --no-headers --format label`
+
+if [-z "$NODEBALANCER_LABEL" ];
+then
+    echo Bad NODEBALANCER_ID $NODEBALANCER_ID
     exit 1
 fi;
 
@@ -38,8 +49,16 @@ then
     exit 1
 fi;
 
+export CONFIG_PORT=`linode-cli nodebalancers config-view $NODEBALANCER_ID $CONFIG_ID --text --no-header --format port`
+
+if [ -z "$CONFIG_PORT" ];
+then
+    echo Bad CONFIG_ID $CONFIG_ID
+    exit 1
+fi;
+
 # Verify that the NODEBALANCER_ID and CONFIG_ID are valid
-linode-cli nodebalancers config-view $NODEBALANCER_ID $CONFIG_ID
+echo Will auto-update the SSL for Nodebalancer $NODEBALANCER_LABEL Port $CONFIG_PORT
 
 # Where the installed acme.sh command is located
 export ACME=/root/.acme.sh/acme.sh
